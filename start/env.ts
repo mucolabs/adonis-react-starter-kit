@@ -25,5 +25,15 @@ export default await Env.create(new URL('../', import.meta.url), {
   */
   SESSION_DRIVER: Env.schema.enum(['cookie', 'memory'] as const),
 
+  BACKUP_DB_FILENAME: Env.schema.string(),
+
+  BUCKET_NAME: Env.schema.string(),
+
+  R2_ENDPOINT: Env.schema.string(),
+
+  R2_ACCESS_KEY_ID: Env.schema.string(),
+
+  R2_SECRET_ACCESS_KEY: Env.schema.string(),
+
   DB_FILENAME: Env.schema.string(),
 })
