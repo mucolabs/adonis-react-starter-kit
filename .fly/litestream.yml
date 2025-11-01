@@ -1,0 +1,11 @@
+dbs:
+  - path: $DB_FILENAME
+    replicas:
+      - type: s3
+        bucket: $BUCKET_NAME
+        path: $BACKUP_DB_FILENAME
+        endpoint: $R2_ENDPOINT
+        region: auto
+        access-key-id: $R2_ACCESS_KEY_ID
+        secret-access-key: $R2_SECRET_ACCESS_KEY
+        force-path-style: true
