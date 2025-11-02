@@ -1,73 +1,89 @@
-import { Form } from '@inertiajs/react'
+import { Form, Link } from '@inertiajs/react'
+import { Box, Button, chakra, Container, Heading, Input, VStack } from '@chakra-ui/react'
+
+import { Field } from '~/components/chakra/field'
+import { PasswordInput } from '~/components/chakra/password_input'
 
 export default function Signup() {
   return (
-    <div className="form-container">
-      <div>
-        <h1> Signup </h1>
-        <p>Enter your details below to create your account</p>
-      </div>
+    <Container
+      maxW="breakpoint-sm"
+      flex="1"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      flexDir="column"
+    >
+      <VStack gap="10" w="full">
+        <VStack align="start" w="full">
+          <Heading size="2xl">Create Account</Heading>
+          <chakra.p fontSize="sm" color="fg.muted">
+            Don&apos;t have an account?{' '}
+            <Box
+              asChild
+              color="colorPalette.solid"
+              _hover={{ color: 'colorPalette.solid', textDecor: 'underline' }}
+            >
+              <Link href="/login" prefetch>
+                Log in
+              </Link>
+            </Box>
+          </chakra.p>
+        </VStack>
 
-      <div>
-        <Form method="POST" action="/signup">
-          {({ errors }) => (
-            <>
-              <div>
-                <label htmlFor="fullName">Full name</label>
-                <input
-                  type="text"
-                  name="fullName"
-                  id="fullName"
-                  data-invalid={errors.fullName ? 'true' : undefined}
-                />
-                {errors.fullName && <div>{errors.fullName}</div>}
-              </div>
+        <Form disableWhileProcessing method="POST" action="/signup" style={{ width: '100%' }}>
+          {({ errors }) => {
+            return (
+              <VStack gap="6">
+                <Field label="Full Name">
+                  <Input size="sm" name="fullName" placeholder="John Doe" />
+                </Field>
 
-              <div>
-                <label htmlFor="email">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  autoComplete="email"
-                  data-invalid={errors.email ? 'true' : undefined}
-                />
-                {errors.email && <div>{errors.email}</div>}
-              </div>
+                <Field
+                  required
+                  label="Email Address"
+                  invalid={Boolean(errors.email)}
+                  errorText={errors.email}
+                >
+                  <Input size="sm" type="email" name="email" placeholder="name@example.com" />
+                </Field>
 
-              <div>
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  autoComplete="new-password"
-                  data-invalid={errors.password ? 'true' : undefined}
-                />
-                {errors.password && <div>{errors.password}</div>}
-              </div>
+                <Field
+                  required
+                  label="Password"
+                  invalid={Boolean(errors.password)}
+                  errorText={errors.password}
+                >
+                  <PasswordInput
+                    size="sm"
+                    name="password"
+                    autoComplete="new-password"
+                    placeholder="Password"
+                  />
+                </Field>
 
-              <div>
-                <label htmlFor="passwordConfirmation">Confirm password</label>
-                <input
-                  type="password"
-                  name="passwordConfirmation"
-                  id="passwordConfirmation"
-                  autoComplete="new-password"
-                  data-invalid={errors.passwordConfirmation ? 'true' : undefined}
-                />
-                {errors.passwordConfirmation && <div>{errors.passwordConfirmation}</div>}
-              </div>
+                <Field
+                  required
+                  label="Confirm Password"
+                  invalid={Boolean(errors.passwordConfirmation)}
+                  errorText={errors.passwordConfirmation}
+                >
+                  <PasswordInput
+                    size="sm"
+                    name="passwordConfirmation"
+                    autoComplete="new-password"
+                    placeholder="Password"
+                  />
+                </Field>
 
-              <div>
-                <button type="submit" className="button">
+                <Button size="sm" w="full" type="submit" mt="8">
                   Sign up
-                </button>
-              </div>
-            </>
-          )}
+                </Button>
+              </VStack>
+            )
+          }}
         </Form>
-      </div>
-    </div>
+      </VStack>
+    </Container>
   )
 }

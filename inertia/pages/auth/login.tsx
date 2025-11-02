@@ -1,49 +1,66 @@
-import { Form } from '@inertiajs/react'
+import { Form, Link } from '@inertiajs/react'
+import { Box, Button, chakra, Container, Heading, Input, VStack } from '@chakra-ui/react'
 
-export default function Login() {
+import { Field } from '~/components/chakra/field'
+import { PasswordInput } from '~/components/chakra/password_input'
+
+export default function LoginPage() {
   return (
-    <div className="form-container">
-      <div>
-        <h1> Login </h1>
-        <p>Enter your details below to login to your account</p>
-      </div>
+    <Container
+      maxW="breakpoint-sm"
+      flex="1"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      flexDir="column"
+    >
+      <VStack gap="10" w="full">
+        <VStack align="start" w="full">
+          <Heading size="2xl">Log in to your account</Heading>
+          <chakra.p fontSize="sm" color="fg.muted">
+            Already have an account?{' '}
+            <Box
+              asChild
+              color="colorPalette.solid"
+              _hover={{ color: 'colorPalette.solid', textDecor: 'underline' }}
+            >
+              <Link href="/signup" prefetch>
+                Sign up
+              </Link>
+            </Box>
+          </chakra.p>
+        </VStack>
 
-      <div>
-        <Form method="POST" action="/login">
-          {({ errors }) => (
-            <>
-              <div>
-                <label htmlFor="email">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  autoComplete="username"
-                  data-invalid={errors.email ? 'true' : undefined}
-                />
-                {errors.email && <div>{errors.email}</div>}
-              </div>
+        <Form disableWhileProcessing method="POST" action="/login" style={{ width: '100%' }}>
+          {({ errors }) => {
+            return (
+              <VStack gap="6">
+                <Field
+                  required
+                  label="Email Address"
+                  invalid={Boolean(errors.email)}
+                  errorText={errors.email}
+                >
+                  <Input size="sm" type="email" name="email" placeholder="name@example.com" />
+                </Field>
 
-              <div>
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  autoComplete="current-password"
-                />
-                {errors.password ? <span>{errors.password}</span> : ''}
-              </div>
+                <Field required label="Password">
+                  <PasswordInput
+                    size="sm"
+                    name="password"
+                    autoComplete="current-password"
+                    placeholder="Password"
+                  />
+                </Field>
 
-              <div>
-                <button type="submit" className="button">
-                  Login
-                </button>
-              </div>
-            </>
-          )}
+                <Button size="sm" w="full" type="submit" mt="8">
+                  Log in
+                </Button>
+              </VStack>
+            )
+          }}
         </Form>
-      </div>
-    </div>
+      </VStack>
+    </Container>
   )
 }

@@ -1,16 +1,36 @@
+import { useEffect } from 'react'
 import { toast, Toaster } from 'sonner'
-import { ReactElement, useEffect } from 'react'
-import { Data } from '~/generated/data'
-import { Form, Link, usePage } from '@inertiajs/react'
-import { Button, chakra, Container, Flex, Heading, HStack, Separator } from '@chakra-ui/react'
+import type { ReactElement } from 'react'
+import { Link, router, usePage } from '@inertiajs/react'
+import {
+  Button,
+  chakra,
+  Container,
+  Flex,
+  Heading,
+  HStack,
+  Menu,
+  Portal,
+  Separator,
+  Span,
+  Strong,
+  VStack,
+} from '@chakra-ui/react'
+
+import type { Data } from '~/generated/data'
+import { Avatar } from '~/components/chakra/avatar'
 import { ColorModeButton } from '~/config/chakra/color-mode'
 
 export default function Layout({ children }: { children: ReactElement<Data.SharedProps> }) {
+  console.log(children.props)
+
+  const url = usePage().url
+
   useEffect(() => {
     toast.dismiss()
-  }, [usePage().url])
+  }, [url])
 
-  if (children.props.flash.error) {
+  if (children.props.flash?.error) {
     toast.error(children.props.flash.error)
   }
 
@@ -32,10 +52,46 @@ export default function Layout({ children }: { children: ReactElement<Data.Share
           </Heading>
 
           <HStack gap="3">
-            <Button size="sm" variant="ghost">
-              Login
-            </Button>
-            <Button size="sm">Signup</Button>
+            {children.props.user ? (
+              <Menu.Root
+                onSelect={({ value }) => {
+                  if (value === 'logout') {
+                    router.post('/logout')
+                  }
+                }}
+              >
+                <Menu.Trigger rounded="full" focusRing="outside">
+                  <Avatar size="sm" name={children.props.user.fullName ?? ''} />
+                </Menu.Trigger>
+                <Portal>
+                  <Menu.Positioner>
+                    <Menu.Content>
+                      <VStack gap={0} align="start" p="1">
+                        <Strong fontSize="sm">{children.props.user.fullName}</Strong>
+                        <Span fontSize="xs">{children.props.user.email}</Span>
+                      </VStack>
+                      <Menu.Separator />
+                      <Menu.Item
+                        value="logout"
+                        color="fg.error"
+                        _hover={{ bg: 'bg.error', color: 'fg.error' }}
+                      >
+                        Logout
+                      </Menu.Item>
+                    </Menu.Content>
+                  </Menu.Positioner>
+                </Portal>
+              </Menu.Root>
+            ) : (
+              <>
+                <Button size="sm" variant="ghost" asChild>
+                  <Link href="/login">Login</Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link href="/signup">Signup</Link>
+                </Button>
+              </>
+            )}
 
             <Separator h="9" orientation="vertical" />
             <ColorModeButton size="sm" variant="subtle" />
