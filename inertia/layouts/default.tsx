@@ -85,10 +85,14 @@ export default function Layout({ children }: { children: ReactElement<Data.Share
             ) : (
               <>
                 <Button size="sm" variant="ghost" asChild>
-                  <Link href="/login">Login</Link>
+                  <Link prefetch href="/login">
+                    Login
+                  </Link>
                 </Button>
                 <Button size="sm" asChild>
-                  <Link href="/signup">Signup</Link>
+                  <Link prefetch href="/signup">
+                    Signup
+                  </Link>
                 </Button>
               </>
             )}

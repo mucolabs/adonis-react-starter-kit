@@ -32,7 +32,7 @@ export default function LoginPage() {
         </VStack>
 
         <Form disableWhileProcessing method="POST" action="/login" style={{ width: '100%' }}>
-          {({ errors }) => {
+          {({ errors, processing }) => {
             return (
               <VStack gap="6">
                 <Field
@@ -53,7 +53,7 @@ export default function LoginPage() {
                   />
                 </Field>
 
-                <Button size="sm" w="full" type="submit" mt="8">
+                <Button size="sm" w="full" type="submit" mt="8" loading={processing}>
                   Log in
                 </Button>
               </VStack>
