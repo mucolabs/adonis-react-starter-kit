@@ -98,13 +98,13 @@ export default function Home() {
             </List.Item>
             <List.Item>
               <Link
-                href="https://github.com/unjs/fontaine/tree/main/packages/fontless"
+                href="https://github.com/unjs/fontaine"
                 target="_blank"
                 colorPalette="gray"
                 variant="underline"
                 fontWeight="bold"
               >
-                Fontless
+                Fontaine
               </Link>{' '}
               for automatic font optimization
             </List.Item>
