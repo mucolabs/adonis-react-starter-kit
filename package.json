@@ -96,5 +96,8 @@
       "./app/middleware/*.ts"
     ]
   },
-  "prettier": "@adonisjs/prettier-config"
+  "prettier": "@adonisjs/prettier-config",
+  "volta": {
+    "node": "24.11.0"
+  }
 }

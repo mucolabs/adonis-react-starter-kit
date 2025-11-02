@@ -1,4 +1,4 @@
-ARG NODE_VERSION=24.10.0
+ARG NODE_VERSION=24.11.0
 ARG ALPINE_VERSION=3.22
 ARG LITESTREAM_VERSION=0.5.2
 
@@ -6,15 +6,9 @@ FROM node:${NODE_VERSION}-alpine${ALPINE_VERSION} AS base
 
 LABEL fly_launch_runtime="Node.js"
 
-# =================================================================================================
-# Tools Stage (New)
-# Purpose: Downloads and extracts Litestream in an isolated stage.
-# Benefit: This layer is cached independently. It only rebuilds if LITESTREAM_VERSION changes,
-# saving significant time on subsequent application builds.
-# =================================================================================================
+
 FROM base AS tools
 ARG LITESTREAM_VERSION
-# Fixed: Install curl, use it, then remove it in a single layer.
 RUN apk add --no-cache --virtual .build-deps curl && \
     curl -fsSL "https://github.com/benbjohnson/litestream/releases/download/v${LITESTREAM_VERSION}/litestream-${LITESTREAM_VERSION}-linux-x86_64.tar.gz" -o /tmp/litestream.tar.gz && \
     tar -C /usr/local/bin -xzf /tmp/litestream.tar.gz && \
@@ -47,13 +41,10 @@ WORKDIR /app
 COPY --from=production-deps /app/node_modules /app/node_modules
 COPY --from=build /app/build /app
 
-# Improved: Copy the Litestream binary from the dedicated tools stage.
 COPY --from=tools /usr/local/bin/litestream /usr/local/bin/litestream
-# Improved: Copy the Litestream config to the standard location.
 COPY .fly/litestream.yml /etc/litestream.yml
 COPY .fly/start.sh ./start.sh
 
-# Improved: Single RUN command to set permissions, keeping layers minimal.
 RUN chmod +x ./start.sh
 
 EXPOSE 8080
